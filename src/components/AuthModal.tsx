@@ -40,9 +40,16 @@ export const AuthModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClo
             console.log("Logged in user:", result.user);
             setStep('success');
             setTimeout(() => onLogin(), 1500);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Google Login Error:", error);
-            alert("Failed to login with Google. Make sure you have enabled Google Auth in Firebase Console.");
+            // Better error message for the user
+            if (error.code === 'auth/operation-not-allowed') {
+                alert("Google Login is not enabled. Please enable it in the Firebase Console under 'Authentication > Sign-in method'.");
+            } else if (error.code === 'auth/unauthorized-domain') {
+                alert("This domain is not authorized for Google Login. Please add your Vercel URL to the 'Authorized domains' list in the Firebase Console.");
+            } else {
+                alert(`Login failed: ${error.message}`);
+            }
         } finally {
             setLoading(false);
         }

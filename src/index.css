@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #F8F6F2;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: clamp(14px, 0.4vw + 12px, 18px);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #F8F6F2;
+    color: #333333;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Fluid Spacing Helpers */
+  .py-fluid {
+    padding-top: clamp(2.5rem, 10vh, 10rem);
+    padding-bottom: clamp(2.5rem, 10vh, 10rem);
+  }
+
+  .px-fluid {
+    padding-left: clamp(1.25rem, 6vw, 5rem);
+    padding-right: clamp(1.25rem, 6vw, 5rem);
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #F8F6F2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom selection color */
+::selection {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+}
+
+/* Stability fixes for framer-motion transitions */
+.framer-motion-container {
+  will-change: transform, opacity;
+}

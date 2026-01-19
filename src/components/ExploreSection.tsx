@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const inspirations = [
     {
@@ -22,6 +23,7 @@ const inspirations = [
 ];
 
 export const ExploreSection = () => {
+    const navigate = useNavigate();
     return (
         <section id="explore" className="py-12 px-[clamp(1rem,5vw,4rem)] bg-transparent">
             <div className="max-w-7xl mx-auto">
@@ -61,7 +63,7 @@ export const ExploreSection = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </div>
                             <button
-                                onClick={() => window.location.href = '/shop'}
+                                onClick={() => navigate('/shop')}
                                 className="text-xl font-black text-charcoal mb-2 hover:text-teal transition-colors w-full text-left"
                             >
                                 {item.title}

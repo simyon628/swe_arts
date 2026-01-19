@@ -1,3 +1,4 @@
+// Cart Page Component
 import { useState } from 'react';
 import { Trash2, Plus, Minus, ArrowRight, ShieldCheck, Ticket } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

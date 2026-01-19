@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
+
   :root {
     font-family: 'Inter', system-ui, sans-serif;
     background-color: #F8F6F2;
@@ -12,7 +16,8 @@
 
   html {
     scroll-behavior: smooth;
-    font-size: clamp(14px, 0.4vw + 12px, 18px);
+    font-size: 100%;
+    /* Default 16px */
   }
 
   body {
@@ -21,6 +26,22 @@
     overflow-x: hidden;
     background-color: #F8F6F2;
     color: #333333;
+  }
+
+  h1 {
+    font-size: clamp(22px, 6vw, 48px);
+  }
+
+  h2 {
+    font-size: clamp(18px, 5vw, 32px);
+  }
+
+  p {
+    font-size: clamp(14px, 4vw, 16px);
+  }
+
+  button {
+    font-size: clamp(14px, 4vw, 16px);
   }
 }
 
@@ -36,26 +57,14 @@
 
   /* Fluid Spacing Helpers */
   .py-fluid {
-    padding-top: clamp(2.5rem, 10vh, 10rem);
-    padding-bottom: clamp(2.5rem, 10vh, 10rem);
+    padding-block: clamp(16px, 5vw, 32px);
   }
 
   .px-fluid {
-    padding-left: clamp(1.25rem, 6vw, 5rem);
-    padding-right: clamp(1.25rem, 6vw, 5rem);
+    padding-inline: clamp(12px, 4vw, 24px);
   }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background-color: #F8F6F2;
-}
-
-* {
-  box-sizing: border-box;
-}
 
 /* Custom selection color */
 ::selection {

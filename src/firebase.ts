@@ -1,15 +1,16 @@
+/// <reference types="vite/client" />
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDoBiHKmqTK-NslN8kECfmOxsPVM5GewfA",
-  authDomain: "swe-arts.firebaseapp.com",
-  projectId: "swe-arts",
-  storageBucket: "swe-arts.firebasestorage.app",
-  messagingSenderId: "938220626601",
-  appId: "1:938220626601:web:a2b5bd7c02d8a8d5c6bfb8",
-  measurementId: "G-75EZYFDGC0"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase

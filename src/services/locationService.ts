@@ -24,19 +24,34 @@ export const getSuggestions = (query: string): LocationSuggestion[] => {
     const q = query.toLowerCase().trim();
     if (q.length < 2) return [];
 
-    // Filter by city name or pincode
+    // Filter local data first for common cities
     return MAJOR_CITIES.filter(loc =>
         loc.city.toLowerCase().includes(q) ||
         (loc.pincode && loc.pincode.startsWith(q))
-    ).slice(0, 5); // Limit to top 5
+    ).slice(0, 5);
 };
 
-export const detectLocation = (query: string): LocationSuggestion | null => {
-    const q = query.toLowerCase().trim();
+export const detectLocation = async (pincode: string): Promise<LocationSuggestion | null> => {
+    const pin = pincode.trim();
+    if (pin.length !== 6 || isNaN(Number(pin))) return null;
 
-    // Exact pincode match or exact city match
-    return MAJOR_CITIES.find(loc =>
-        (loc.pincode === q) ||
-        (loc.city.toLowerCase() === q)
-    ) || null;
+    try {
+        const response = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
+        const data = await response.json();
+
+        if (data[0].Status === "Success") {
+            const post = data[0].PostOffice[0];
+            return {
+                city: post.District,
+                state: post.State,
+                pincode: pin,
+                deliveryDays: '3-5' // Standard for major distance
+            };
+        }
+    } catch (error) {
+        console.error("Pincode API Error:", error);
+    }
+
+    // Fallback to local data if API fails or no match
+    return MAJOR_CITIES.find(loc => loc.pincode === pin) || null;
 };

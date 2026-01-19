@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MapPin, ShieldCheck, ArrowRight, Plus, CheckCircle2, CreditCard, Landmark, Smartphone } from 'lucide-react';
+import { MapPin, ShieldCheck, ArrowRight, Plus, CheckCircle2, CreditCard, Landmark, Smartphone, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formatPrice } from '../utils/priceFormatter';
 import { UserAddress } from '../services/userService';
 import { motion, AnimatePresence } from 'framer-motion';
+import { detectLocation } from '../services/locationService';
 
 interface CheckoutProps {
     cartItems: any[];
@@ -19,6 +20,8 @@ export function Checkout({ cartItems, currentUser, savedAddresses, onSaveAddress
     const [selectedAddressId, setSelectedAddressId] = useState<string>(savedAddresses.find(a => a.isDefault)?.id || savedAddresses[0]?.id || '');
     const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'netbanking'>('upi');
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isCheckingPincode, setIsCheckingPincode] = useState(false);
+    const [pincodeError, setPincodeError] = useState<string | null>(null);
 
     // New Address Form State
     const [newAddress, setNewAddress] = useState<UserAddress>({
@@ -34,22 +37,33 @@ export function Checkout({ cartItems, currentUser, savedAddresses, onSaveAddress
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
 
-    // Pincode Resolution Logic
+    // Pincode Real-time Logic
     useEffect(() => {
-        if (newAddress.pincode.length === 6) {
-            // Mock resolution
-            const pincodeMap: Record<string, { city: string, state: string }> = {
-                '500081': { city: 'Hyderabad', state: 'Telangana' },
-                '110001': { city: 'New Delhi', state: 'Delhi' },
-                '400001': { city: 'Mumbai', state: 'Maharashtra' },
-                '560001': { city: 'Bengaluru', state: 'Karnataka' },
-                '600001': { city: 'Chennai', state: 'Tamil Nadu' }
-            };
-            const resolved = pincodeMap[newAddress.pincode];
-            if (resolved) {
-                setNewAddress(prev => ({ ...prev, city: resolved.city, state: resolved.state }));
+        const checkPin = async () => {
+            if (newAddress.pincode.length === 6) {
+                setIsCheckingPincode(true);
+                setPincodeError(null);
+                try {
+                    const result = await detectLocation(newAddress.pincode);
+                    if (result) {
+                        setNewAddress(prev => ({
+                            ...prev,
+                            city: result.city,
+                            state: result.state
+                        }));
+                    } else {
+                        setPincodeError("Invalid Pincode");
+                    }
+                } catch (err) {
+                    setPincodeError("Failed to detect location");
+                } finally {
+                    setIsCheckingPincode(false);
+                }
+            } else {
+                setPincodeError(null);
             }
-        }
+        };
+        checkPin();
     }, [newAddress.pincode]);
 
     const handleSaveNewAddress = async (e: React.FormEvent) => {
@@ -79,10 +93,10 @@ export function Checkout({ cartItems, currentUser, savedAddresses, onSaveAddress
         return null;
     }
     return (
-        <div className="pt-[clamp(6rem,12vh,8rem)] pb-24 px-[clamp(1rem,5vw,4rem)] min-h-screen bg-ivory relative overflow-hidden">
+        <div className="pt-32 pb-fluid px-fluid min-h-screen bg-ivory relative overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-end justify-between mb-12">
-                    <h1 className="text-[clamp(2.5rem,5vw,4.5rem)] font-black text-charcoal tracking-tighter uppercase italic leading-none">Checkout</h1>
+                    <h1 className="text-[clamp(1.8rem,5vw,4.5rem)] font-black text-charcoal tracking-tighter uppercase italic leading-none">Checkout</h1>
                     <p className="text-[10px] font-black uppercase tracking-[0.4em] text-charcoal/30 flex items-center gap-2">
                         <ShieldCheck size={14} className="text-teal" /> Secure Studio Logistics
                     </p>
@@ -117,36 +131,40 @@ export function Checkout({ cartItems, currentUser, savedAddresses, onSaveAddress
                                         className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-charcoal/5 space-y-6"
                                     >
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="space-y-2">
+                                            <div className="space-y-1.5 flex flex-col">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-charcoal/30 ml-2">Full Name</label>
-                                                <input required type="text" value={newAddress.fullName} onChange={e => setNewAddress({ ...newAddress, fullName: e.target.value })} className="w-full bg-ivory border border-charcoal/5 rounded-2xl py-4 px-6 text-xs font-bold focus:ring-2 focus:ring-teal outline-none" />
+                                                <input required type="text" value={newAddress.fullName} onChange={e => setNewAddress({ ...newAddress, fullName: e.target.value })} className="w-full h-[44px] bg-ivory border border-charcoal/5 rounded-lg px-4 text-sm font-bold focus:ring-2 focus:ring-teal outline-none transition-all" />
                                             </div>
-                                            <div className="space-y-2">
+                                            <div className="space-y-1.5 flex flex-col">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-charcoal/30 ml-2">Mobile Number</label>
-                                                <input required type="tel" value={newAddress.mobile} onChange={e => setNewAddress({ ...newAddress, mobile: e.target.value })} className="w-full bg-ivory border border-charcoal/5 rounded-2xl py-4 px-6 text-xs font-bold focus:ring-2 focus:ring-teal outline-none" />
+                                                <input required type="tel" value={newAddress.mobile} onChange={e => setNewAddress({ ...newAddress, mobile: e.target.value })} className="w-full h-[44px] bg-ivory border border-charcoal/5 rounded-lg px-4 text-sm font-bold focus:ring-2 focus:ring-teal outline-none transition-all" />
                                             </div>
-                                            <div className="md:col-span-2 space-y-2">
+                                            <div className="md:col-span-2 space-y-1.5 flex flex-col">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-charcoal/30 ml-2">Flat / House / Building</label>
-                                                <input required type="text" value={newAddress.house} onChange={e => setNewAddress({ ...newAddress, house: e.target.value })} className="w-full bg-ivory border border-charcoal/5 rounded-2xl py-4 px-6 text-xs font-bold focus:ring-2 focus:ring-teal outline-none" />
+                                                <input required type="text" value={newAddress.house} onChange={e => setNewAddress({ ...newAddress, house: e.target.value })} className="w-full h-[44px] bg-ivory border border-charcoal/5 rounded-lg px-4 text-sm font-bold focus:ring-2 focus:ring-teal outline-none transition-all" />
                                             </div>
-                                            <div className="md:col-span-2 space-y-2">
+                                            <div className="md:col-span-2 space-y-1.5 flex flex-col">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-charcoal/30 ml-2">Street / Area</label>
-                                                <input required type="text" value={newAddress.street} onChange={e => setNewAddress({ ...newAddress, street: e.target.value })} className="w-full bg-ivory border border-charcoal/5 rounded-2xl py-4 px-6 text-xs font-bold focus:ring-2 focus:ring-teal outline-none" />
+                                                <input required type="text" value={newAddress.street} onChange={e => setNewAddress({ ...newAddress, street: e.target.value })} className="w-full h-[44px] bg-ivory border border-charcoal/5 rounded-lg px-4 text-sm font-bold focus:ring-2 focus:ring-teal outline-none transition-all" />
                                             </div>
-                                            <div className="space-y-2">
+                                            <div className="space-y-1.5 flex flex-col relative">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-charcoal/30 ml-2">Pincode</label>
-                                                <input required type="text" maxLength={6} value={newAddress.pincode} onChange={e => setNewAddress({ ...newAddress, pincode: e.target.value })} placeholder="e.g. 500081" className="w-full bg-ivory border border-charcoal/5 rounded-2xl py-4 px-6 text-xs font-bold focus:ring-2 focus:ring-teal outline-none" />
+                                                <div className="relative">
+                                                    <input required type="text" maxLength={6} value={newAddress.pincode} onChange={e => setNewAddress({ ...newAddress, pincode: e.target.value })} placeholder="e.g. 500081" className="w-full h-[44px] bg-ivory border border-charcoal/5 rounded-lg px-4 text-sm font-bold focus:ring-2 focus:ring-teal outline-none transition-all" />
+                                                    {isCheckingPincode && <Loader2 size={16} className="absolute right-4 top-1/2 -translate-y-1/2 animate-spin text-teal" />}
+                                                </div>
+                                                {pincodeError && <span className="text-[9px] font-bold text-red-500 ml-2 uppercase tracking-tight">{pincodeError}</span>}
                                             </div>
-                                            <div className="space-y-2">
+                                            <div className="space-y-1.5 flex flex-col">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-charcoal/30 ml-2">City & State</label>
-                                                <div className="w-full bg-ivory/50 border border-charcoal/5 rounded-2xl py-4 px-6 text-xs font-bold text-charcoal/40">
-                                                    {newAddress.city ? `${newAddress.city}, ${newAddress.state}` : 'Waiting for Pincode...'}
+                                                <div className="w-full h-[44px] bg-ivory/50 border border-charcoal/5 rounded-lg px-4 text-sm font-bold text-charcoal/40 flex items-center">
+                                                    {newAddress.city ? `${newAddress.city}, ${newAddress.state}` : (isCheckingPincode ? 'Checking...' : 'Enter Pincode...')}
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex gap-4 pt-4">
-                                            <button type="submit" className="flex-1 bg-charcoal text-white py-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-teal transition-all">Save & Continue</button>
-                                            {savedAddresses.length > 0 && <button type="button" onClick={() => setIsAddingNew(false)} className="px-6 border border-charcoal/10 rounded-xl text-[10px] font-black uppercase tracking-widest">Cancel</button>}
+                                            <button type="submit" disabled={isCheckingPincode || !!pincodeError} className="flex-1 h-[48px] bg-charcoal text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-teal transition-all disabled:opacity-50 disabled:cursor-not-allowed">Save & Continue</button>
+                                            {savedAddresses.length > 0 && <button type="button" onClick={() => setIsAddingNew(false)} className="px-6 h-[48px] border border-charcoal/10 rounded-xl text-[10px] font-black uppercase tracking-widest">Cancel</button>}
                                         </div>
                                     </motion.form>
                                 ) : (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, Plus, Minus, ArrowRight, ShieldCheck, Ticket, Filter, ShoppingCart, Heart } from 'lucide-react';
+import { Trash2, Plus, Minus, ArrowRight, ShieldCheck, Ticket } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { formatPrice } from '../utils/priceFormatter';
@@ -30,7 +30,7 @@ export function CartPage({ cartItems, onUpdateQuantity, onRemoveItem }: CartPage
 
     if (cartItems.length === 0) {
         return (
-            <div className="pt-40 pb-24 px-8 min-h-screen bg-ivory flex flex-col items-center justify-center text-center space-y-8">
+            <div className="pt-32 pb-fluid px-fluid min-h-screen bg-ivory flex flex-col items-center justify-center text-center space-y-8">
                 <div className="w-24 h-24 bg-charcoal/5 rounded-full flex items-center justify-center">
                     <Trash2 size={40} className="text-charcoal/20" />
                 </div>
@@ -49,7 +49,7 @@ export function CartPage({ cartItems, onUpdateQuantity, onRemoveItem }: CartPage
     }
 
     return (
-        <div className="pt-[clamp(6rem,12vh,8rem)] pb-24 px-[clamp(1rem,5vw,4rem)] min-h-screen bg-ivory">
+        <div className="pt-32 pb-fluid px-fluid min-h-screen bg-ivory">
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-end justify-between mb-12">
                     <h1 className="text-[clamp(2.5rem,5vw,4.5rem)] font-black text-charcoal tracking-tighter uppercase italic leading-none">Your Cart</h1>

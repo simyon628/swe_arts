@@ -117,7 +117,7 @@ export const ProductDetailPage = ({ isLoggedIn, cartItems, onAddToCart, onUpdate
         setShowSuggestions(false);
     };
 
-    const handlePincodeCheck = () => {
+    const handlePincodeCheck = async () => {
         if (!locationInput.trim()) {
             alert("Please enter pincode or city name");
             return;
@@ -125,21 +125,24 @@ export const ProductDetailPage = ({ isLoggedIn, cartItems, onAddToCart, onUpdate
         setIsChecking(true);
         setPincodeResult(null);
 
-        setTimeout(() => {
+        try {
+            const found = await detectLocation(locationInput);
             setIsChecking(false);
-            const found = detectLocation(locationInput);
             if (found) {
                 setPincodeResult(found);
             } else {
                 setPincodeResult({ city: '', state: '', available: false } as any);
             }
-        }, 800);
+        } catch (error) {
+            setIsChecking(false);
+            setPincodeResult({ city: '', state: '', available: false } as any);
+        }
     };
 
     const similarProducts = products.filter(p => p.category === product.category && p.id !== product.id);
 
     return (
-        <div className="min-h-screen bg-[#F8F6F2] pt-32 pb-24 px-[clamp(1rem,5vw,4rem)] selection:bg-teal/10 selection:text-teal font-sans">
+        <div className="min-h-screen bg-[#F8F6F2] pt-32 pb-fluid px-fluid selection:bg-teal/10 selection:text-teal font-sans">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
@@ -312,12 +315,13 @@ export const ProductDetailPage = ({ isLoggedIn, cartItems, onAddToCart, onUpdate
                                                 placeholder="Enter Pincode or City"
                                                 value={locationInput}
                                                 onChange={(e) => handleLocationChange(e.target.value)}
-                                                className="w-full bg-white border border-charcoal/10 pl-10 pr-4 py-3 rounded-xl text-sm font-bold focus:ring-2 focus:ring-teal outline-none"
+                                                onKeyDown={(e) => e.key === 'Enter' && handlePincodeCheck()}
+                                                className="w-full h-[44px] bg-white border border-charcoal/10 pl-10 pr-4 rounded-lg text-sm font-bold focus:ring-2 focus:ring-teal outline-none"
                                             />
                                         </div>
                                         <button
                                             onClick={handlePincodeCheck}
-                                            className="bg-charcoal text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-teal transition-all"
+                                            className="h-[44px] bg-charcoal text-white px-6 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-teal transition-all whitespace-nowrap"
                                         >
                                             Check
                                         </button>

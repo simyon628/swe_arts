@@ -308,8 +308,8 @@ function AppContent() {
                 onLogin={handleLogin}
             />
 
-            <footer id="about" className="py-16 bg-transparent border-t border-charcoal/5">
-                <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-16 items-start">
+            <footer id="about" className="py-fluid bg-transparent border-t border-charcoal/5">
+                <div className="max-w-7xl mx-auto px-fluid grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
                     {/* Left: Logo & Brand */}
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">

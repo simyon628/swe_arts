@@ -37,7 +37,7 @@ export const ShopPage = ({ isLoggedIn, cartItems, onAddToCart, onUpdateQuantity,
     const getCartItem = (id: number) => cartItems.find(item => item.id === id);
 
     return (
-        <div className="pt-40 pb-24 px-8 md:px-16 min-h-screen bg-[#FDFBF7] selection:bg-teal/10 selection:text-teal font-sans">
+        <div className="pt-32 pb-fluid px-fluid min-h-screen bg-[#FDFBF7] selection:bg-teal/10 selection:text-teal font-sans">
             <div className="max-w-7xl mx-auto space-y-16">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b border-charcoal/5">
                     <div className="space-y-4">

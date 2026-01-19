@@ -16,7 +16,7 @@ import { ExploreSection } from './components/ExploreSection';
 import { userService, UserAddress } from './services/userService';
 import { ShoppingCart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CartPage } from './pages/CartPage';
+import { CartView } from './pages/CartView';
 import { OrderSuccess } from './pages/OrderSuccess';
 
 interface HomeProps {
@@ -293,7 +293,7 @@ function AppContent() {
                         showToast("Please login or sign up to add items to cart");
                     }}
                 />} />
-                <Route path="/cart" element={<CartPage cartItems={cartItems} onUpdateQuantity={updateQuantity} onRemoveItem={removeFromCart} />} />
+                <Route path="/cart" element={<CartView cartItems={cartItems} onUpdateQuantity={updateQuantity} onRemoveItem={removeFromCart} />} />
                 <Route path="/checkout" element={<Checkout cartItems={cartItems} currentUser={currentUser} savedAddresses={addresses} onSaveAddress={handleSaveAddress} onClearCart={clearCart} />} />
                 <Route path="/success" element={<OrderSuccess />} />
                 <Route path="/profile" element={<div className="pt-32 px-8 text-center h-screen">

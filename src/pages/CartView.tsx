@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { formatPrice } from '../utils/priceFormatter';
 
-interface CartPageProps {
+interface CartViewProps {
     cartItems: any[];
     onUpdateQuantity: (id: number, delta: number, variant?: any) => void;
     onRemoveItem: (id: number, variant?: any) => void;
 }
 
-export function CartPage({ cartItems, onUpdateQuantity, onRemoveItem }: CartPageProps) {
+export function CartView({ cartItems, onUpdateQuantity, onRemoveItem }: CartViewProps) {
     const navigate = useNavigate();
     const [couponCode, setCouponCode] = useState('');
     const [discount, setDiscount] = useState(0);

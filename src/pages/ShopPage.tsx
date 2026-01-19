@@ -76,7 +76,10 @@ export const ShopPage = ({ isLoggedIn, cartItems, onAddToCart, onUpdateQuantity,
                         <div className="p-8 bg-charcoal text-white rounded-[2.5rem] space-y-4">
                             <h4 className="text-sm font-black italic tracking-widest">Custom Orders</h4>
                             <p className="text-[10px] text-white/60 font-medium leading-relaxed">Have a specific vision? We craft bespoke pieces tailored to your space.</p>
-                            <button className="text-[10px] font-black uppercase tracking-widest text-teal flex items-center gap-2 hover:translate-x-2 transition-transform">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); alert('Custom Inquiry coming soon!'); }}
+                                className="text-[10px] font-black uppercase tracking-widest text-[#C9A24D] flex items-center gap-2 hover:translate-x-2 transition-transform"
+                            >
                                 Inquire Now <ArrowRight size={14} />
                             </button>
                         </div>

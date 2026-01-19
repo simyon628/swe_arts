@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { categories } from '../cms/cms';
 
 export const HeroPinterest = () => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const navigate = useNavigate();
 
     const nextCategory = useCallback(() => {
         setActiveIndex((prev) => (prev + 1) % categories.length);
@@ -41,7 +43,8 @@ export const HeroPinterest = () => {
                             animate={{ y: '0%', opacity: 1 }}
                             exit={{ y: '-100%', opacity: 0 }}
                             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                            className="absolute block text-[clamp(20px,6vw,32px)] md:text-[clamp(48px,8vw,72px)] font-black text-[#C9A24D] tracking-tighter italic leading-none whitespace-nowrap"
+                            onClick={() => navigate(`/shop?category=${encodeURIComponent(currentCategory.name)}`)}
+                            className="absolute block text-[clamp(20px,6vw,32px)] md:text-[clamp(48px,8vw,72px)] font-black text-[#C9A24D] tracking-tighter italic leading-none whitespace-nowrap cursor-pointer hover:scale-105 transition-transform"
                         >
                             {currentCategory.name}
                         </motion.span>

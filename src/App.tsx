@@ -298,7 +298,19 @@ function AppContent() {
                 <Route path="/success" element={<OrderSuccess />} />
                 <Route path="/profile" element={<div className="pt-32 px-8 text-center h-screen">
                     <h1 className="text-4xl font-black text-charcoal">Profile Page</h1>
-                    <p className="text-charcoal/40 mt-4">Feature coming soon in Phase 2.</p>
+                    <p className="text-charcoal/40 mt-4">Feature coming soon.</p>
+                </div>} />
+                <Route path="/orders" element={<div className="pt-32 px-8 text-center h-screen">
+                    <h1 className="text-4xl font-black text-charcoal">Recent Orders</h1>
+                    <p className="text-charcoal/40 mt-4">No orders yet.</p>
+                </div>} />
+                <Route path="/wishlist" element={<div className="pt-32 px-8 text-center h-screen">
+                    <h1 className="text-4xl font-black text-charcoal">My Wishlist</h1>
+                    <p className="text-charcoal/40 mt-4">Feature coming soon.</p>
+                </div>} />
+                <Route path="/addresses" element={<div className="pt-32 px-8 text-center h-screen">
+                    <h1 className="text-4xl font-black text-charcoal">Saved Addresses</h1>
+                    <p className="text-charcoal/40 mt-4">No addresses saved.</p>
                 </div>} />
             </Routes>
 

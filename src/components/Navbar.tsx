@@ -77,10 +77,10 @@ export const Navbar = ({ isLoggedIn, user, cartCount, onLoginClick, onLogout }: 
                         onClick={handleLogoClick}
                         className="flex items-center gap-3 group cursor-pointer"
                     >
-                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-charcoal/5 shadow-sm transition-transform group-hover:scale-110">
+                        <div className="w-9 h-9 md:w-11 md:h-11 rounded-full overflow-hidden border border-charcoal/5 shadow-sm transition-transform group-hover:scale-110">
                             <img src="/logo.jpg" alt="Swe Arts" className="w-full h-full object-cover" />
                         </div>
-                        <span className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-black tracking-tighter text-teal">
+                        <span className="text-[clamp(1.2rem,2.5vw,1.8rem)] font-black text-charcoal tracking-tight group-hover:text-[#C9A24D] transition-colors">
                             Swe Arts
                         </span>
                     </a>

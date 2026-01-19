@@ -40,7 +40,7 @@ export const HeroPinterest = () => {
                             animate={{ y: '0%', opacity: 1 }}
                             exit={{ y: '-100%', opacity: 0 }}
                             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                            className="absolute block text-[clamp(48px,8vw,72px)] font-black text-[#C9A24D] tracking-tighter italic leading-none whitespace-nowrap"
+                            className="absolute block text-[clamp(32px,8vw,64px)] font-black text-[#C9A24D] tracking-tighter italic leading-none whitespace-nowrap"
                         >
                             {currentCategory.name}
                         </motion.span>
@@ -59,9 +59,11 @@ export const HeroPinterest = () => {
                         transition={{ duration: 1 }}
                         className="flex flex-col gap-[clamp(0.5rem,2vw,1.5rem)]"
                     >
-                        {/* Row 1: Strictly Indices 1, 2, 6, 7 */}
-                        <div className="grid grid-cols-4 gap-[clamp(0.5rem,2vw,1.5rem)] max-w-5xl mx-auto w-full">
-                            {[0, 1, 5, 6].map((poolIdx, idx) => {
+                        {/* Row 1: 3 images on mobile, 4 on desktop */}
+                        <div className="grid grid-cols-3 md:grid-cols-4 gap-[clamp(0.4rem,1.5vw,1rem)] max-w-5xl mx-auto w-full px-2">
+                            {[0, 1, 5, 2].map((poolIdx, idx) => {
+                                // Hide the 4th item on mobile to keep 3 columns clean
+                                const isHiddenOnMobile = idx === 3;
                                 const img = finalItems[poolIdx];
                                 return (
                                     <motion.div
@@ -69,8 +71,8 @@ export const HeroPinterest = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: idx % 2 === 0 ? 0 : -10 }}
                                         transition={{ duration: 1, delay: idx * 0.1 }}
-                                        className="rounded-[18px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] bg-charcoal/5"
-                                        style={{ height: 'clamp(200px, 18vw, 240px)' }}
+                                        className={`rounded-[12px] md:rounded-[18px] overflow-hidden shadow-lg bg-charcoal/5 ${isHiddenOnMobile ? 'hidden md:block' : ''}`}
+                                        style={{ height: 'clamp(140px, 20vw, 240px)' }}
                                     >
                                         <motion.div
                                             animate={{ y: [0, -6, 0] }}
@@ -84,9 +86,11 @@ export const HeroPinterest = () => {
                             })}
                         </div>
 
-                        {/* Row 2+: Flowing Remaining Items */}
-                        <div className="grid grid-cols-7 gap-[clamp(0.5rem,2vw,1.5rem)] w-full">
-                            {[2, 3, 4, 7, 8, 9, 10, 11, 12, 13].slice(0, 7).map((poolIdx, idx) => {
+                        {/* Row 2: 5 images on mobile, 7 on desktop */}
+                        <div className="grid grid-cols-5 md:grid-cols-7 gap-[clamp(0.4rem,1.5vw,1rem)] w-full">
+                            {[3, 4, 7, 8, 9, 10, 11].map((poolIdx, idx) => {
+                                // Hide 6th and 7th items on mobile
+                                const isHiddenOnMobile = idx >= 5;
                                 const img = finalItems[poolIdx];
                                 const colOffsets = [0, -6, 6, -6, 6, -6, 0];
                                 return (
@@ -95,8 +99,8 @@ export const HeroPinterest = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: colOffsets[idx] }}
                                         transition={{ duration: 1, delay: 0.4 + idx * 0.05 }}
-                                        className="rounded-[18px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] bg-charcoal/5"
-                                        style={{ height: 'clamp(180px, 16vw, 220px)' }}
+                                        className={`rounded-[10px] md:rounded-[18px] overflow-hidden shadow-lg bg-charcoal/5 ${isHiddenOnMobile ? 'hidden md:block' : ''}`}
+                                        style={{ height: 'clamp(120px, 18vw, 220px)' }}
                                     >
                                         <motion.div
                                             animate={{ y: [0, -6, 0] }}
